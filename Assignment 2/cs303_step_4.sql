@@ -16,14 +16,16 @@ SELECT patient.name, owner.name FROM patientOwner
 JOIN patient on patient.patient_id = patientOwner.patient_id
 JOIN owner ON owner.owner_id = patientOwner.owner_id;
 -- Output:
--- name	    name
--- Lupin	Julie Tremblay
--- Lupin	Alex Morin
--- Luna	    Julie Tremblay
--- Milo	    Sarah Chen
--- Garfield	David Roy
--- Daisy	David Roy
--- Caramel	Sarah Chen  -- <- This is our new cat and owner association
+--    name   |      name
+-- ----------+----------------
+--  Lupin    | Julie Tremblay
+--  Lupin    | Alex Morin
+--  Luna     | Julie Tremblay
+--  Milo     | Sarah Chen
+--  Garfield | David Roy
+--  Daisy    | David Roy
+--  Caramel  | Sarah Chen  <- This is our new cat and owner association
+-- (7 rows)
 
 -- Rollback
 --      We can attempt to do the same thing again, but with an owner that doesn't exist, with id = 999
@@ -36,7 +38,10 @@ INSERT INTO patientOwner (owner_id, patient_id)
 VALUES (999, currval(pg_get_serial_sequence('patient', 'patient_id'))); -- New owner doesn't exist
 
 COMMIT; -- Should give the following error:
--- Error: Your transaction is currently aborted due to an error. You must explicitly issue a ROLLBACK or ROLLBACK TO SAVEPOINT before executing further commands
+-- BEGIN
+-- INSERT 0 1
+-- ERROR:  insert or update on table "patientOwner" violates foreign key constraint "patientowner_owner_id_fkey"
+-- DETAIL:  Key (owner_id)=(999) is not present in table "owner".
 
 ROLLBACK;
 
@@ -44,3 +49,14 @@ ROLLBACK;
 SELECT patient.name, owner.name FROM patientOwner
 JOIN patient on patient.patient_id = patientOwner.patient_id
 JOIN owner ON owner.owner_id = patientOwner.owner_id;
+-- Output
+--    name   |      name
+-- ----------+----------------
+--  Lupin    | Julie Tremblay
+--  Lupin    | Alex Morin
+--  Luna     | Julie Tremblay
+--  Milo     | Sarah Chen
+--  Garfield | David Roy
+--  Daisy    | David Roy
+--  Caramel  | Sarah Chen
+-- (7 rows)  <- No new patient/owner association
