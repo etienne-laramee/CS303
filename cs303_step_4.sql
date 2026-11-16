@@ -45,6 +45,18 @@ COMMIT; -- Should give the following error:
 
 ROLLBACK;
 
+SELECT * FROM patient;
+-- Output shows that the new patient Macha has not been added to the patient table:
+--  patient_id |   name   | species |         breed         | date_of_birth | weight | weight_unit
+-- ------------+----------+---------+-----------------------+---------------+--------+-------------
+--           2 | Luna     | Cat     | Domestic Shorthair    | 2021-08-03    |   4.20 | lbs
+--           3 | Milo     | Dog     | Long Haired Dachshund | 2023-02-17    |  26.80 | lbs
+--           4 | Garfield | Cat     | Maine Coon            | 2022-06-25    |   6.10 | lbs
+--           5 | Daisy    | Dog     | Golden Retriever      | 2024-03-10    |  23.40 | lbs
+--           1 | Lupin    | Dog     | Long Haired Dachshund | 2020-03-26    |  25.00 | lbs
+--           9 | Caramel  | Cat     | Big Orange Cat        | 2026-05-01    |   5.30 | kg
+-- (6 rows)
+
 --      Verify transaction hasn't worked
 SELECT patient.name, owner.name FROM patientOwner
 JOIN patient on patient.patient_id = patientOwner.patient_id

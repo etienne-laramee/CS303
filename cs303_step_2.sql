@@ -113,8 +113,6 @@ VALUES
     (9, 85.00),
     (10, 40.00);
 
-BEGIN;
-
 -- Update Lupin's weight to 25 lbs
 UPDATE patient
 SET weight = 25
@@ -144,5 +142,3 @@ RETURNING visit_id, patient_id, date, reason;
 --  visit_id | patient_id |    date    |            reason
 -- ----------+------------+------------+-------------------------------
 --         8 |          5 | 2026-11-20 | Canceled wellness appointment
-
-COMMIT;
