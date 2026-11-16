@@ -113,6 +113,7 @@ BEGIN
 END;
 $$;
 
+--      Then create the trigger and reference the previously created function
 CREATE TRIGGER create_price_after_treatment
 AFTER INSERT ON treatment
 FOR EACH ROW
